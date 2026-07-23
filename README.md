@@ -5,6 +5,15 @@ prediction, ICU monitoring, EHR, and hospital operations — built as a full-sta
 system with no hardcoded/mock data (everything is generated, stored, and served dynamically) and
 no login (the homepage asks for a name, then enters the platform directly).
 
+<img width="1917" height="906" alt="med1" src="https://github.com/user-attachments/assets/dccee022-05c1-4c61-926f-ca24ace5f549" />
+<img width="1917" height="902" alt="med2" src="https://github.com/user-attachments/assets/c510cc26-2749-40dd-982e-15e648f38ae3" />
+<img width="1917" height="907" alt="med3" src="https://github.com/user-attachments/assets/1ca67ef6-3dcb-4a72-858c-2645c22f526f" />
+<img width="1917" height="907" alt="med4" src="https://github.com/user-attachments/assets/cdaaf3e1-95d9-4692-bcf1-c3cdbc7477b4" />
+<img width="1917" height="911" alt="med5" src="https://github.com/user-attachments/assets/0a06e833-a84b-47d0-80cb-7c929269ba4a" />
+<img width="1917" height="906" alt="med6" src="https://github.com/user-attachments/assets/c35c6704-60a3-4a7e-b034-02241b8f2ff7" />
+<img width="1917" height="901" alt="med7" src="https://github.com/user-attachments/assets/26995c3f-3906-4171-b602-4c23c87e0f06" />
+
+
 ## Tech Stack
 
 | Layer               | Technology                                                              |
