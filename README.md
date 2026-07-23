@@ -57,12 +57,17 @@ MedNexusAI/
 │   ├── tsconfig*.json
 │   ├── eslint.config.js
 │   ├── package.json
-│   └── .env.local                  VITE_BACKEND_URL
+│   ├── .env.local                  VITE_BACKEND_URL (local dev → localhost:8000)
+│   └── .env.production              VITE_BACKEND_URL (prod → deployed Cloud Run URL; auto-loaded by `vite build`)
 │
 ├── backend/                        FastAPI application
 │   ├── main.py                     App entrypoint — CORS, error middleware, router registration,
 │   │                                Groq-backed summarize/imaging-interpretation endpoints
 │   ├── mcp_server.py                Standalone MCP server exposing backend logic as MCP tools
+│   ├── Dockerfile                   Cloud Run image (python:3.14-slim; LD_PRELOAD works around a
+│   │                                torch/libstdc++ symbol clash — see Deployment below)
+│   ├── .dockerignore / .gcloudignore  Exclude venv/, .cache/, __pycache__/, *.log, .env from
+│   │                                  the Docker build context and the Cloud Build source upload
 │   ├── db.py                        Supabase client setup
 │   ├── routers/                     One FastAPI router per resource/module
 │   │   ├── patients.py, doctors.py, ehr.py, allergies.py
@@ -109,6 +114,8 @@ MedNexusAI/
 │                                      admissions_daily, resource_forecast, activity_feed,
 │                                      fhir_resources, patient_events, kpi_snapshot)
 │
+├── firebase.json                   Hosting config — serves frontend/dist, SPA rewrite to index.html
+├── .firebaserc                     Default Firebase project (mednexusai-app)
 └── package-lock.json
 ```
 
@@ -245,3 +252,41 @@ npm run build      # tsc -b && vite build → frontend/dist
 - **FHIR server**: HAPI FHIR, self-hosted on Render free tier.
 
 All services are on free tiers by design; no paid GCP Healthcare API is used.
+
+### Live environment
+
+- **Frontend**: https://mednexusai-app.web.app
+- **Backend**: https://mednexusai-backend-395129067672.us-central1.run.app
+- **GCP/Firebase project**: `mednexusai-app` (`us-central1`), dedicated to this app
+
+### Redeploying
+
+Backend (Cloud Run, builds from `backend/Dockerfile` via Cloud Build):
+
+```bash
+gcloud run deploy mednexusai-backend \
+  --source backend \
+  --region us-central1 \
+  --project mednexusai-app \
+  --allow-unauthenticated \
+  --memory 2Gi --cpu 2 --timeout 300 \
+  --set-env-vars "GROQ_API_KEY=...,SUPABASE_URL=...,SUPABASE_SERVICE_ROLE_KEY=..."
+```
+
+Frontend (Firebase Hosting, serves `frontend/dist`):
+
+```bash
+cd frontend && npm run build    # picks up frontend/.env.production automatically
+cd .. && firebase deploy --only hosting --project mednexusai-app
+```
+
+**Gotcha:** `main.py` imports `imaging` (→ `torch`) before `icd10` (→ `medspacy` → `quickumls` →
+`pysimstring`, a compiled C++ extension). On Linux, torch's bundled `libstdc++` shadows the
+system one and breaks `pysimstring` at import time with `undefined symbol:
+_ZTVN10__cxxabiv117__class_type_infoE`. The Dockerfile sets
+`LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6` to force the system library to load first —
+don't remove it. This only shows up in the container; the local Windows venv is unaffected.
+
+**Known gap:** `GOOGLE_CSE_API_KEY` / `GOOGLE_CSE_CX` are not currently set in Cloud Run, so the
+AI Assistant's web-search toggle is inactive in production (same as local unless you set them in
+`backend/.env`).
