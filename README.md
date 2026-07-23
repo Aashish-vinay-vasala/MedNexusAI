@@ -5,6 +5,12 @@ prediction, ICU monitoring, EHR, and hospital operations — built as a full-sta
 system with no hardcoded/mock data (everything is generated, stored, and served dynamically) and
 no login (the homepage asks for a name, then enters the platform directly).
 
+### Live environment
+
+- **Frontend**: https://mednexusai-app.web.app
+- **Backend**: https://mednexusai-backend-395129067672.us-central1.run.app
+- **GCP/Firebase project**: `mednexusai-app` (`us-central1`), dedicated to this app
+
 <img width="1917" height="906" alt="med1" src="https://github.com/user-attachments/assets/dccee022-05c1-4c61-926f-ca24ace5f549" />
 <img width="1917" height="902" alt="med2" src="https://github.com/user-attachments/assets/c510cc26-2749-40dd-982e-15e648f38ae3" />
 <img width="1917" height="907" alt="med3" src="https://github.com/user-attachments/assets/1ca67ef6-3dcb-4a72-858c-2645c22f526f" />
@@ -261,12 +267,6 @@ npm run build      # tsc -b && vite build → frontend/dist
 - **FHIR server**: HAPI FHIR, self-hosted on Render free tier.
 
 All services are on free tiers by design; no paid GCP Healthcare API is used.
-
-### Live environment
-
-- **Frontend**: https://mednexusai-app.web.app
-- **Backend**: https://mednexusai-backend-395129067672.us-central1.run.app
-- **GCP/Firebase project**: `mednexusai-app` (`us-central1`), dedicated to this app
 
 ### Redeploying
 
