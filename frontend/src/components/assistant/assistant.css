@@ -1,0 +1,97 @@
+/* Glassmorphic surfaces + smooth interactive transitions for the global AI assistant widget.
+   --mnx-accent is set per-panel (inline style, from the widget's COLOR constant) so hover/focus
+   states here can react to it without every button needing its own JS mouse handlers. */
+
+.mnx-panel {
+  background: linear-gradient(165deg, rgba(20, 27, 48, 0.62), rgba(6, 10, 20, 0.72));
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 16px 64px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.mnx-strip {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mnx-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Base interactive element: every button/select in the widget gets this for a consistent,
+   springy-but-quick feel instead of instant/no transitions. */
+.mnx-btn,
+.mnx-select,
+.mnx-input {
+  transition:
+    background-color 200ms cubic-bezier(.22, 1, .36, 1),
+    border-color 200ms cubic-bezier(.22, 1, .36, 1),
+    color 200ms cubic-bezier(.22, 1, .36, 1),
+    box-shadow 200ms cubic-bezier(.22, 1, .36, 1),
+    transform 150ms cubic-bezier(.22, 1, .36, 1),
+    opacity 200ms ease;
+}
+
+.mnx-btn {
+  will-change: transform;
+}
+
+.mnx-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.mnx-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.96);
+  transition-duration: 90ms;
+}
+
+.mnx-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Toolbar / size / icon buttons that carry an accent tint when active — hover should brighten
+   the accent itself rather than the neutral glass tint above. */
+.mnx-btn-accent:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--mnx-accent, #0EA5E9) 16%, transparent);
+  border-color: color-mix(in srgb, var(--mnx-accent, #0EA5E9) 45%, transparent);
+}
+
+.mnx-select:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.mnx-select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--mnx-accent, #0EA5E9) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mnx-accent, #0EA5E9) 18%, transparent);
+}
+
+.mnx-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--mnx-accent, #0EA5E9) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mnx-accent, #0EA5E9) 14%, transparent);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mnx-history-item {
+  transition: background-color 160ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.mnx-history-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mnx-send-btn:hover:not(:disabled) {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--mnx-accent, #0EA5E9) 16%, transparent);
+}
+
+.mnx-panel ::-webkit-scrollbar { width: 5px; }
+.mnx-panel ::-webkit-scrollbar-track { background: transparent; }
+.mnx-panel ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 3px; }

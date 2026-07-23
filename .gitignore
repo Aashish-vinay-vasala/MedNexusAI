@@ -1,0 +1,25 @@
+# Environment files
+.env
+.env.local
+*.env
+!*.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# MedNIST dataset cache (re-downloadable; only the trained checkpoint in backend/models is committed)
+backend/.cache/
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+
+# Logs
+*.log
+
+# Temp/debug assets
+frontend/tmp_*.png
